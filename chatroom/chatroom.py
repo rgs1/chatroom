@@ -29,12 +29,12 @@ class State(rx.State):
 
     async def nick_change(self, nick: str) -> None:
         """Handle on_blur from nick text input."""
-        self.nick = nick
+        self.nick = nick.title()
         await broadcast_nicks()
 
     async def send_message(self) -> None:
         """Broadcast chat message to other connected clients."""
-        m = Message(nick=self.nick, sent=time.time(), message=self.in_message)
+        m = Message(nick=self.nick.title(), sent=time.time(), message=self.in_message)
         await broadcast_event("state.incoming_message", payload=dict(message=m))
         self.in_message = ""
 
