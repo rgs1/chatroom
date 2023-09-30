@@ -7,6 +7,10 @@ from rxconfig import config
 import reflex as rx
 
 
+def to_proper(s):
+    return ' '.join(x.capitalize() for x in s.split(' '))
+
+
 class Message(rx.Base):
     nick: str
     sent: float
@@ -34,14 +38,14 @@ class State(rx.State):
 
     async def send_message(self) -> None:
         """Broadcast chat message to other connected clients."""
-        m = Message(nick=self.nick, sent=time.time(), message=self.in_message)
+        m = Message(nick=to_proper(self.nick), sent=time.time(), message=self.in_message)
         await broadcast_event("state.incoming_message", payload=dict(message=m))
         self.in_message = ""
 
     @rx.var
     def other_nicks(self) -> t.List[str]:
         """Filter nicks list to exclude nick from this instance."""
-        return [n for n in self.nicks if n != self.nick]
+        return [to_proper(n) for n in self.nicks if n != self.nick]
 
 
 def index() -> rx.Component:
