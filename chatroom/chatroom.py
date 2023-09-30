@@ -62,7 +62,7 @@ def index() -> rx.Component:
             rx.vstack(
                 rx.foreach(
                     State.messages,
-                    lambda m: rx.text("<", m.nick, "> ", m.message),
+                    lambda m: rx.text("<", m.nick, "> ", m.message, style={"textTransform": "capitalize"}),
                 ),
                 rx.form(
                     rx.hstack(
